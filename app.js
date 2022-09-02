@@ -10,15 +10,15 @@
 //         console.log(table.rows[a].cells[b])
 //     }
 // }
-
+let count = 10;
 $(document).on('click', "#start-btn", generateTable);
 
 function generateTable() {
     let table = $('<table class="game-table"></table>');
     let tableBody = $("<tbody></tbody>");
-    for (let a = 0; a < 10; a++) {
+    for (let a = 0; a < count; a++) {
         const row = $(`<tr class="row-${a}"></tr>`);
-        for (let b = 0; b < 10; b++) {
+        for (let b = 0; b < count; b++) {
             const cell = $(`<td class="game-square cell-${b}"></td>`);
             chooseColor(cell);
             $(row).append(cell);
@@ -32,11 +32,11 @@ function generateTable() {
 function chooseColor(square) {
     const num = Math.floor(Math.random() * (3 - 1 + 1)+ 1);
     if (num === 1) {
-        $(square).css('background-color', 'red');
+        $(square).css('background-color', '#F2637E');
     } else if (num === 2) {
-        $(square).css('background-color', 'blue');
+        $(square).css('background-color', '#F20CCC');
     } else {
-        $(square).css('background-color', 'green');
+        $(square).css('background-color', '#0D76D9');
     }
 }
 
@@ -53,45 +53,38 @@ function assignEvent(event) {
 function checkFour(element) {
     $(element).addClass("away");
 
-    // if (iterate(element, 'next')) {
-    //     console.log('There is a next sibling.')
-    //     // let result = iterate(element, 'next');
-    //     // console.log(result);
-    //     checkFour(iterate(element, 'next'));
-    // } else {
-    //     console.log('No next sibling');
-    // }
-
-    if (iterate(element, 'prev')) {
-        console.log('There is a previous sibling.');
-        let result = iterate(element, 'prev');
-        console.log(result);
+    if (iterate(element, 'next') && colorMatch(element, iterate(element, 'next'))) {
+        // console.log('There is a next sibling.');
+        checkFour(iterate(element, 'next'));
     } else {
-        console.log('No previous sibilng.');
+        // console.log('No next sibling');
+    }
+
+    if (iterate(element, 'prev') && colorMatch(element, iterate(element, 'prev'))) {
+        // console.log('There is a previous sibling.');
+        checkFour(iterate(element, 'prev'));
+    } else {
+        // console.log('No previous sibling.');
     }
 
 }
 
 function iterate(element, sibType) {
-    const table = document.querySelector('#this-table');
+    const table = document.querySelector('.game-table');
 
     const rowNum = parseInt($(element).parent().attr("class").split("").splice(-1, 1).join(""));
-    // console.log(rowNum);
-
     const cellNum = parseInt($(element).attr("class").split("").splice(-6, 1).join(""));
     // console.log(cellNum);
 
-    // SECTION - Next Sibling:
-    // NOTE - Success, iterate just through current row that <td> click event lives in.
-    // for (let a = rowNum; a < rowNum + 1; a++) {
-    // console.log(table.rows[a]);
-    // }
-
     if (sibType === 'next') {
-        if (cellNum < 2) {
+        if (cellNum < count - 1) {
             for (let a = rowNum; a < rowNum + 1; a++) {
                 for (let b = cellNum; b < cellNum + 1; b++) {
-                    return table.rows[a].cells[b + 1];
+                    if (!hasAwayClass(table.rows[a].cells[b + 1])) {
+                        return table.rows[a].cells[b + 1];
+                    } else {
+                        return false
+                    }
                 }
             }
         } else {
@@ -103,7 +96,11 @@ function iterate(element, sibType) {
         if (cellNum > 0) {
             for (let a = rowNum; a < rowNum + 1; a++) {
                 for (let b = cellNum; b > cellNum - 1; b--) {
-                    return table.rows[a].cells[b - 1];
+                    if (!hasAwayClass(table.rows[a].cells[b - 1])) {
+                        return table.rows[a].cells[b - 1];
+                    } else {
+                        return false;
+                    }
                 }
             }
         } else {
@@ -113,3 +110,22 @@ function iterate(element, sibType) {
 
 }
 
+function colorMatch(firstElem, secondElem) {
+    let firstElemRgb = $(firstElem).css('background-color');
+    let firstElemColor = firstElemRgb.substring(4, firstElemRgb.length - 1).split(" ");
+    let secondElemRgb = $(secondElem).css('background-color');
+    let secondElemColor = secondElemRgb.substring(4, secondElemRgb.length - 1).split(" ")
+    if (firstElemColor[2] === secondElemColor[2]) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function hasAwayClass(element) {
+    if ($(element).hasClass("away")) {
+        return true;
+    } else {
+        return false;
+    }
+}

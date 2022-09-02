@@ -28,7 +28,11 @@ function checkFour(element) {
 
     if (iterate(element, 'next')) {
         console.log('There is a next sibling.')
+        // let result = iterate(element, 'next');
+        // console.log(result);
         checkFour(iterate(element, 'next'));
+    } else {
+        console.log('No next sibling');
     }
 }
 
@@ -38,6 +42,7 @@ function iterate(element, sibType) {
     // console.log(rowNum);
 
     const cellNum = parseInt($(element).attr("class").split("").splice(-6, 1).join(""));
+    console.log(cellNum);
 
     // SECTION - Next Sibling:
     // NOTE - Success, iterate just through current row that <td> click event lives in.
@@ -46,10 +51,10 @@ function iterate(element, sibType) {
     // }
 
     if (sibType === 'next') {
-        if (cellNum < 3) {
+        if (cellNum < 2) {
             for (let a = rowNum; a < rowNum + 1; a++) {
                 for (let b = cellNum; b < cellNum + 1; b++) {
-                    return table.rows[a].cells[b];
+                    return table.rows[a].cells[b + 1];
                 }
             }
         } else {
@@ -57,7 +62,13 @@ function iterate(element, sibType) {
         }
     }
 
-    // if cellNum < 3
+    // if (sibType === 'prev') {
+    //     if (cellNum > 0 ) { 
+    //         for (let a = rowNum; a < rowNum + 1; a++) {
+    //             for (let b = cellNum; b > cellNum - 1; b--) {}
+    //         }
+    //     }
+    // }
 
 }
 

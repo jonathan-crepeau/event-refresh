@@ -11,7 +11,10 @@
 //     }
 // }
 let count = 10;
+
 $(document).on('click', "#start-btn", generateTable);
+$(document).on('click', 'td', assignEvent);
+
 
 function generateTable() {
     let table = $('<table class="game-table"></table>');
@@ -40,11 +43,6 @@ function chooseColor(square) {
     }
 }
 
-
-// SECTION - Playground:
-
-$(document).on('click', 'td', assignEvent);
-
 function assignEvent(event) {
     let cell = $(event.target);
     checkFour(cell);
@@ -53,23 +51,29 @@ function assignEvent(event) {
 function checkFour(element) {
     $(element).addClass("away");
 
-    if (iterate(element, 'next') && colorMatch(element, iterate(element, 'next'))) {
+    if (getSib(element, 'next') && colorMatch(element, getSib(element, 'next'))) {
         // console.log('There is a next sibling.');
-        checkFour(iterate(element, 'next'));
-    } else {
-        // console.log('No next sibling');
+        checkFour(getSib(element, 'next'));
     }
 
-    if (iterate(element, 'prev') && colorMatch(element, iterate(element, 'prev'))) {
+    if (getSib(element, 'prev') && colorMatch(element, getSib(element, 'prev'))) {
         // console.log('There is a previous sibling.');
-        checkFour(iterate(element, 'prev'));
-    } else {
-        // console.log('No previous sibling.');
+        checkFour(getSib(element, 'prev'));
     }
 
+    if (getSib(element, 'top') && colorMatch(element, getSib(element, 'top'))) {
+        // console.log('Top has sibling.')
+        checkFour(getSib(element, 'top'));
+        // checkFour(getSib(element, 'top'))
+    }
+
+    if (getSib(element, 'bottom') && colorMatch(element, getSib(element, 'bottom'))) {
+        checkFour(getSib(element, 'bottom'));
+    }
+    return
 }
 
-function iterate(element, sibType) {
+function getSib(element, sibType) {
     const table = document.querySelector('.game-table');
 
     const rowNum = parseInt($(element).parent().attr("class").split("").splice(-1, 1).join(""));
@@ -78,33 +82,67 @@ function iterate(element, sibType) {
 
     if (sibType === 'next') {
         if (cellNum < count - 1) {
-            for (let a = rowNum; a < rowNum + 1; a++) {
-                for (let b = cellNum; b < cellNum + 1; b++) {
-                    if (!hasAwayClass(table.rows[a].cells[b + 1])) {
-                        return table.rows[a].cells[b + 1];
-                    } else {
-                        return false
-                    }
-                }
+            if (!hasAwayClass(table.rows[rowNum].cells[cellNum + 1])) {
+                return table.rows[rowNum].cells[cellNum + 1];
+            } else {
+                return false;
             }
-        } else {
-            return false;
         }
+        // if (cellNum < count - 1) {
+        //     for (let a = rowNum; a < rowNum + 1; a++) {
+        //         for (let b = cellNum; b < cellNum + 1; b++) {
+        //             if (!hasAwayClass(table.rows[a].cells[b + 1])) {
+        //                 return table.rows[a].cells[b + 1];
+        //             } else {
+        //                 return false
+        //             }
+        //         }
+        //     }
+        // } else {
+        //     return false;
+        // }
     }
 
     if (sibType === 'prev') {
         if (cellNum > 0) {
-            for (let a = rowNum; a < rowNum + 1; a++) {
-                for (let b = cellNum; b > cellNum - 1; b--) {
-                    if (!hasAwayClass(table.rows[a].cells[b - 1])) {
-                        return table.rows[a].cells[b - 1];
-                    } else {
-                        return false;
-                    }
-                }
+            if (!hasAwayClass(table.rows[rowNum].cells[cellNum - 1])) {
+                return table.rows[rowNum].cells[cellNum - 1];
+            } else {
+                return false;
             }
-        } else {
-            return false;
+        }
+        // if (cellNum > 0) {
+        //     for (let a = rowNum; a < rowNum + 1; a++) {
+        //         for (let b = cellNum; b > cellNum - 1; b--) {
+        //             if (!hasAwayClass(table.rows[a].cells[b - 1])) {
+        //                 return table.rows[a].cells[b - 1];
+        //             } else {
+        //                 return false;
+        //             }
+        //         }
+        //     }
+        // } else {
+        //     return false;
+        // }
+    }
+
+    if (sibType === 'top') {
+        if (rowNum > 0) {
+            if (!hasAwayClass(table.rows[rowNum - 1].cells[cellNum])) {
+                return table.rows[rowNum - 1].cells[cellNum];
+            } else {
+                return false
+            }
+        }
+    }
+
+    if (sibType === 'bottom') {
+        if (rowNum < count - 1) {
+            if (!hasAwayClass(table.rows[rowNum + 1].cells[cellNum])) {
+                return table.rows[rowNum + 1].cells[cellNum];
+            } else {
+                return false;
+            }
         }
     }
 

@@ -1,23 +1,12 @@
-body {
-    display: block;
-    height: 100vh;
-}
-
-.game-square {
-    height: 30px;
-    width: 30px;
-}
-
-.game-table {
-    border: 2px black solid;
-    border-collapse: separate;
-    border-spacing: 4px;
-}
-
-.game-table td {
+#this-table {
     border: 1px black solid;
 }
 
+#this-table td {
+    border: 1px black solid;
+    padding: 10px;
+}
+
 .away {
-    opacity: 0 !important;
+    background: chartreuse;
 }

@@ -1,52 +1,63 @@
-$('[type="button"]').on('click', generateTable);
+const table = document.querySelector('#this-table');
 
-function generateTable() {
-    const table = $('<table class="game-table"></table>');
-    const tableBody = $('<tbody></tbody>')
-    for (let a = 0; a < 4; a++) {
-        const row = $('<tr class="row-' + a +'"></<tr>');
-        for (let b = 0; b < 4; b++) {
-            const cell = $('<td class="game-square cell-' + b + '"></td>');
-            chooseColor(cell);
-            // const cellText = document.createTextNode('cell in row ${a}, column ${b}');
-            // $(cell).append(cellText);
-            $(row).append(cell);
+// console.log(table.rows.length);
+
+// NOTE successful
+// for ( let a = 1; a < table.rows.length - 1; a++) { console.log(table.rows[a])
+// }
+
+
+// NOTE - successful for console.logging <td> (cell) elements;
+// for ( let a = 1; a < table.rows.length - 1; a++) { 
+//     for (let b = 0; b < table.rows[a].cells.length; b++) {
+//         console.log(table.rows[a].cells[b])
+//     }
+// }
+
+// SECTION - Playground:
+
+$(document).on('click', 'td', assignEvent);
+
+function assignEvent(event) {
+    let cell = $(event.target);
+    checkFour(cell);
+}
+
+function checkFour(element) {
+    $(element).addClass("away");
+
+    if (iterate(element, 'next')) {
+        console.log('There is a next sibling.')
+        checkFour(iterate(element, 'next'));
+    }
+}
+
+function iterate(element, sibType) {
+
+    const rowNum = parseInt($(element).parent().attr("class").split("").splice(-1, 1).join(""));
+    // console.log(rowNum);
+
+    const cellNum = parseInt($(element).attr("class").split("").splice(-6, 1).join(""));
+
+    // SECTION - Next Sibling:
+    // NOTE - Success, iterate just through current row that <td> click event lives in.
+    // for (let a = rowNum; a < rowNum + 1; a++) {
+    // console.log(table.rows[a]);
+    // }
+
+    if (sibType === 'next') {
+        if (cellNum < 3) {
+            for (let a = rowNum; a < rowNum + 1; a++) {
+                for (let b = cellNum; b < cellNum + 1; b++) {
+                    return table.rows[a].cells[b];
+                }
+            }
+        } else {
+            return false;
         }
-        $(tableBody).append(row);
     }
-    $(table).append(tableBody);
-    $('.table-container').append(table)
-    $(table).css('border')
+
+    // if cellNum < 3
+
 }
 
-function chooseColor(cell) {
-    const num = Math.floor(Math.random() * (3 - 1 + 1)+ 1);
-    if (num === 1) {
-        $(cell).css('background-color', '#BF1765');
-    } else if (num === 2) {
-        $(cell).css('background-color', '#EDB428');
-    } else {
-        $(cell).css('background-color', '#0B2A81');
-    }
-}
-
-
-// SECTION - Event Listener "Playground":
-
-$(document).on('click', 'td', checkClick);
-
-function checkClick(event) {
-    const square = event.target;
-    // console.log($(square));
-    // console.log( $(square).next() );
-    checkSiblings(square)
-}
-
-function colorMatch(element) {
-    const targetLastRgb = $(element).css('background-color').substring(4, 'background-color'.length - 1).split(" ");
-    console.log(targetLastRgb);
-}
-
-function checkSiblings(element) {
-    colorMatch(element);
-}

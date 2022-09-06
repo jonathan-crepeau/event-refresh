@@ -1,14 +1,17 @@
 
-let count = 15;
-
 // SECTION - Game Object
 let game = {
+    count: 15,
+    score: 0,
+    round: 1,
+    time: 0,
+    matchingGameSquares: [],
     generateTable() {
         let table = $('<table class="game-table"></table>');
         let tableBody = $("<tbody></tbody>");
-        for (let a = 0; a < count; a++) {
+        for (let a = 0; a < game.count; a++) {
             const row = $(`<tr id="${a}"></tr>`);
-            for (let b = 0; b < count; b++) {
+            for (let b = 0; b < game.count; b++) {
                 const cell = $(`<td id="${b}" class="game-square"></td>`);
                 game.chooseColor(cell);
                 $(row).append(cell);
@@ -31,9 +34,19 @@ let game = {
     assignEvent(event) {
         let cell = $(event.target);
         game.checkFour(cell);
+        game.updateScore();
+    },
+    updateScore() {
+        if (game.matchingGameSquares.length > 1) {
+            game.score = (game.matchingGameSquares.length * 2) + game.score;
+        } else {
+            game.score++
+        }
+        game.matchingGameSquares = [];
     },
     checkFour(element) {
         $(element).addClass("away");
+        game.matchingGameSquares.push(element);    
     
         if (game.getSib(element, 'next') && game.colorMatch(element, game.getSib(element, 'next'))) {
             // console.log('There is a next sibling.');
@@ -56,6 +69,15 @@ let game = {
         }
         return
     },
+    scoreUpdate() {
+        console.log('========== SCORE UPDATE ==========');
+        console.log(game.matchingGameSquares.length);
+        if (game.matchingGameSquares.length > 1) {
+            game.score = (game.matchingGameSquares.length * 2) + game.score;
+        } else {
+            game.score++;
+        }
+    },
     colorMatch(firstElem, secondElem) {
         let firstElemRgb = $(firstElem).css('background-color');
         let firstElemColor = firstElemRgb.substring(4, firstElemRgb.length - 1).split(" ");
@@ -74,7 +96,7 @@ let game = {
         const cellNum = parseInt( $(element).attr("id"));
     
         if (sibType === 'next') {
-            if (cellNum < count - 1) {
+            if (cellNum < game.count - 1) {
                 if (!game.hasAwayClass(table.rows[rowNum].cells[cellNum + 1])) {
                     return table.rows[rowNum].cells[cellNum + 1];
                 } else {
@@ -104,7 +126,7 @@ let game = {
         }
     
         if (sibType === 'bottom') {
-            if (rowNum < count - 1) {
+            if (rowNum < game.count - 1) {
                 if (!game.hasAwayClass(table.rows[rowNum + 1].cells[cellNum])) {
                     return table.rows[rowNum + 1].cells[cellNum];
                 } else {
@@ -127,6 +149,7 @@ let game = {
 // SECTION - Click Events:
 $(document).on('click', "#start-btn", game.generateTable);
 $(document).on('click', 'td', game.assignEvent);
+
 
 
 

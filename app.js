@@ -1,5 +1,5 @@
 
-let count = 10;
+let count = 15;
 
 // SECTION - Game Object
 let game = {
@@ -7,9 +7,9 @@ let game = {
         let table = $('<table class="game-table"></table>');
         let tableBody = $("<tbody></tbody>");
         for (let a = 0; a < count; a++) {
-            const row = $(`<tr class="row-${a}"></tr>`);
+            const row = $(`<tr id="${a}"></tr>`);
             for (let b = 0; b < count; b++) {
-                const cell = $(`<td class="game-square cell-${b}"></td>`);
+                const cell = $(`<td id="${b}" class="game-square"></td>`);
                 game.chooseColor(cell);
                 $(row).append(cell);
             }
@@ -69,12 +69,9 @@ let game = {
     },
     getSib(element, sibType) {
         const table = document.querySelector('.game-table');
-    
-        const rowNum = parseInt($(element).parent().attr("class").split("").splice(-1, 1).join(""));
-        console.log('rowNum -> ' + rowNum);
-        const cellNum = parseInt($(element).attr("class").split("").splice(-6, 1).join(""));
-        console.log('cellNum -> ' + cellNum);
-        // console.log(cellNum);
+
+        const rowNum = parseInt($(element).parent().attr("id"));
+        const cellNum = parseInt( $(element).attr("id"));
     
         if (sibType === 'next') {
             if (cellNum < count - 1) {

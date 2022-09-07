@@ -1,10 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Telugu&display=swap');
+
 * {
     padding: 0;
     margin: 0;
 }
 
+nav {
+    height: 103px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    padding: 10px;
+
+    font-family: "Anek Telugu", sans-serif;
+    text-transform: uppercase;
+    color: #fff;
+
+    background: linear-gradient(#A6522F, #401706);
+}
+
+nav > p:first-child {
+    font-size: 1.6rem;
+}
+
+#double-line {
+    width: 300px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+}
+
+#table-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
 #start-btn {
-    margin: 10px;
+    padding: 10px;
+    text-transform: uppercase;
+    font-family: sans-serif;
+    font-weight: 700;
+}
+
+#time-span {
+    color: yellow;
 }
 
 .game-table {
@@ -19,8 +59,8 @@
 }
 
 .game-square {
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
 }
 
 .away {

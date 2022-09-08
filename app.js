@@ -6,15 +6,19 @@ let game = {
     score: 0,
     round: 1,
     time: 0,
+    timer: 0,
     matchingGameSquares: [],
     startGame() {
-        if (game.round > 3) {
-            alert('Game OVER!');
-            game.gameOver();
-        } else {
-            game.updateRound();
-            game.setTimer();
-        }
+        game.updateRound();
+        game.setTimer();
+
+        // if (game.round > 3) {
+        //     alert('Game OVER!');
+        //     game.gameOver();
+        // } else {
+        //     game.updateRound();
+        //     game.setTimer();
+        // }
     } ,
     generateTable() {
         let table = $('<table class="game-table"></table>');
@@ -44,34 +48,65 @@ let game = {
     updateRound() {
         $('#round-span').html(game.round);
         $('#start-btn').detach();
-        if (game.round === 1) {
-            game.time = 30;
-        } else if (game.round === 2) {
-            game.time = 20;
+        
+        if (game.round === 1) { 
+            game.timer = 30;
+            game.time = game.timer;
         } else {
-            game.time = 10;
+            game.timer = game.timer - 2;
+            game.time = game.timer;
         }
-        $('#time-span').html(game.time);
+
+        // $('#round-span').html(game.round);
+        // $('#start-btn').detach();
+        // if (game.round === 1) {
+        //     game.time = 30;
+        // } else if (game.round === 2) {
+        //     game.time = 20;
+        // } else {
+        //     game.time = 10;
+        // }
+        // $('#time-span').html(game.time);
     },
     setTimer() {
         const timer = setInterval(() => {
-                game.time--;
-                $('#time-span').html(`${game.time}`);
-                console.log(game.time);
-            if (game.time === 0 && game.round < 3) {
-                clearInterval(timer);
-                game.round++;
-                alert('Next Round. Ready?');
-                $('#table-container').empty();
-                game.generateTable();
-                game.startGame();
-            } else if (game.time === 0) {
-                clearInterval(timer);
-                game.round++;
-                game.startGame();
-            }
+            game.time--;
+            $('#time-span').html(game.time);
+            console.log(game.time);
 
-        }, 200)
+            if (game.time === 0) {
+                clearInterval(timer);
+                if (game.isTableEmpty()) {
+                    game.round++;
+                    alert('Next round. Ready?');
+                    $('#table-container').empty();
+                    game.generateTable();
+                    game.startGame();
+                } else {
+                    alert('Game OVER!');
+                    game.gameOver();
+                }
+            }
+        }, 1000)
+
+        // const timer = setInterval(() => {
+        //         game.time--;
+        //         $('#time-span').html(`${game.time}`);
+        //         console.log(game.time);
+        //     if (game.time === 0 && game.round < 3) {
+        //         clearInterval(timer);
+        //         game.round++;
+        //         alert('Next Round. Ready?');
+        //         $('#table-container').empty();
+        //         game.generateTable();
+        //         game.startGame();
+        //     } else if (game.time === 0) {
+        //         clearInterval(timer);
+        //         game.round++;
+        //         game.startGame();
+        //     }
+
+        // }, 1000)
     },
     updateScore() {
         if (game.matchingGameSquares.length > 1) {
@@ -81,6 +116,33 @@ let game = {
         }
         $('#score-span').html(game.score);
         game.matchingGameSquares = [];
+    },
+    isTableEmpty() {
+        const table = document.querySelector('.game-table');
+        const noAwayClassSquares = [];
+
+        for (let a = 0, row; row = table.rows[a]; a++) {
+            // console.log(table.rows[a]);
+            for (let b = 0, col; col = row.cells[b]; b++) {
+                // console.log(row.cells[b]);
+                if (!game.hasAwayClass(row.cells[b])) {
+                    noAwayClassSquares.push(row.cells[b]);
+                }
+            }
+        }
+        // console.log(noAwayClassSquares);
+        if (noAwayClassSquares.length === 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+        // if (document.querySelector('td')) {
+        //     console.log('<td> remain');
+        //     return false;
+        // } else {
+        //     return true;
+        // }
     },
     handleClick(event) {
         let cell = $(event.target);

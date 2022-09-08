@@ -5,12 +5,22 @@
     margin: 0;
 }
 
+/* body {
+    height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    background: lightblue;
+} */
+
 nav {
     height: 103px;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     padding: 10px;
+    box-shadow: 2px 4px 5px rgb(0, 0, 0, 0.35);
 
     font-family: "Anek Telugu", sans-serif;
     text-transform: uppercase;
@@ -31,9 +41,14 @@ nav > p:first-child {
 }
 
 #table-container {
+    /* width: 417px; */
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+}
+
+table {
+    box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.35);
 }
 
 #start-btn {
@@ -43,7 +58,7 @@ nav > p:first-child {
     font-weight: 700;
 }
 
-#time-span {
+#time-span, #round-span, #score-span {
     color: yellow;
 }
 

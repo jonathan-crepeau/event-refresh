@@ -8,7 +8,7 @@ let game = {
     score: 0,
     round: 1,
     time: 0,
-    timer: 0,
+    timer: 30,
     matchingGameSquares: [],
     startGame() {
         game.updateRound();
@@ -44,7 +44,7 @@ let game = {
         $('#start-btn').detach();
         
         if (game.round === 1) { 
-            game.timer = 30;
+            game.timer = 35;
             game.time = game.timer;
         } else {
             game.timer = game.timer - 2;
@@ -66,7 +66,7 @@ let game = {
                     game.generateTable();
                     game.startGame();
                 } else {
-                    alert('Game OVER!');
+                    alert('Game OVER!');z
                     game.gameOver();
                 }
             }

@@ -44,7 +44,7 @@ let game = {
         $('#start-btn').detach();
         
         if (game.round === 1) { 
-            game.timer = 35;
+            game.timer = 30;
             game.time = game.timer;
         } else {
             game.timer = game.timer - 2;
@@ -66,7 +66,7 @@ let game = {
                     game.generateTable();
                     game.startGame();
                 } else {
-                    alert('Game OVER!');z
+                    alert('Game OVER!');
                     game.gameOver();
                 }
             }
@@ -128,15 +128,15 @@ let game = {
         }
         return
     },
-    scoreUpdate() {
-        console.log('========== SCORE UPDATE ==========');
-        console.log(game.matchingGameSquares.length);
-        if (game.matchingGameSquares.length > 1) {
-            game.score = (game.matchingGameSquares.length * 2) + game.score;
-        } else {
-            game.score++;
-        }
-    },
+    // scoreUpdate() {
+    //     console.log('========== SCORE UPDATE ==========');
+    //     console.log(game.matchingGameSquares.length);
+    //     if (game.matchingGameSquares.length > 1) {
+    //         game.score = (game.matchingGameSquares.length * 2) + game.score;
+    //     } else {
+    //         game.score++;
+    //     }
+    // },
     colorMatch(firstElem, secondElem) {
         let firstElemRgb = $(firstElem).css('background-color');
         let firstElemColor = firstElemRgb.substring(4, firstElemRgb.length - 1).split(" ");
